@@ -16,7 +16,7 @@ Os principais arquivos de registro estão localizados na pasta %systemroot%\Syst
 - USERDIFF (usado apenas para upgrades do sistema operacional)
 
 
-![image](https://gist.github.com/user-attachments/assets/c3896dcf-5dac-499c-b76b-b3c6b7564adf)
+![image](./img/image_01.png)
 
 *Imagem 1 - Arquivos de registro do Systema*
 
@@ -29,7 +29,7 @@ O primeiro desses arquivos, ntuser.dat, contém as opções gerais de software, 
 
 Outro fato interessante é a estrutura do registro do Windows que é muito semelhante à estrutura do sistema de arquivos do Windows. A imagem 2 compara o Editor do Registro, a ferramenta que você usa para editar o registro, e o Windows Explorer. No painel esquerdo do editor, chamado key pane (painel de chaves), você vê a hierarquia do registro, assim como no Windows Explorer você vê a hierarquia do sistema de arquivos no painel esquerdo. Cada pasta no key pane é uma chave do registro. No painel direito do editor, chamado value pane (painel de valores), você vê os valores de uma chave, assim como no painel direito do Windows Explorer você vê o conteúdo de uma pasta.
 
-![image](https://gist.github.com/user-attachments/assets/40398ad8-9b67-4a17-b3c8-39afa64b096a)
+![image](./img/image_02.png)
 
 *Imagem 2 - Removida do livro "Microsoft Windows Registry Guide", Jerry Honeycutt, 2005*
 
@@ -50,9 +50,9 @@ No geral, embora o Registro do Windows seja um enorme com milhares de valores e 
 
 Pesquisando o SID do usuário logado (current user)
 
-![image](https://gist.github.com/user-attachments/assets/dfc3a81f-6aa1-401c-8400-96894e3723ab)
+![image](./img/image_03.png)
 
-![image](https://gist.github.com/user-attachments/assets/2e742c63-2a3f-42e8-9bc5-95d2d946ad74)
+![image](./img/image_04.png)
 
 ### Manipulando os registro com Python
 
@@ -75,7 +75,7 @@ if key:
     wrg.CloseKey(key)
 ```
 
-![image](https://gist.github.com/user-attachments/assets/f09544bb-be4a-40a6-8625-541012a0d64d)
+![image](./img/image_05.png)
 
 
 - #### Lendo a informação do registro
@@ -95,7 +95,7 @@ if soft:
 print(value)
 ```
 
-![image](https://gist.github.com/user-attachments/assets/bd241a56-edcf-4dbb-89df-bd7ba3191010)
+![image](./img/image_06.png)
 
 - #### Deletando o valor 'Value One' da chave 'DoZeroAoUm'
 
@@ -113,7 +113,7 @@ if key:
     wrg.CloseKey(key) 
 ```
 
-![image](https://gist.github.com/user-attachments/assets/c9e8eaa8-5241-4b07-bc6b-fa041ccb96c3)
+![image](./img/image_07.png)
 
 ## Referências
 
