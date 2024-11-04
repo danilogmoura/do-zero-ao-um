@@ -1,6 +1,3 @@
-
-# Matemática - 14/08/2024
-
 ## Exercícios
 
 ---
