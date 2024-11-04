@@ -1,5 +1,5 @@
 
-# Projeto: Terminais WebSocket com Node.js e Python
+# Projeto: Terminais WebSocket com Python
 
 ## Visão Geral
 
@@ -15,7 +15,7 @@ Este projeto configura um ambiente com terminais interativos que se comunicam vi
 
 - `index.html`: Interface web que renderiza dois terminais conectados aos WebSockets nas portas 3001 e 3002.
 - `docker-compose.yml`: Configuração do Docker Compose para orquestrar os dois containers.
-- `Dockerfile`: Define o ambiente com Node.js e Python, utilizando Alpine Linux como base.
+- `Dockerfile`: Define o ambiente com Python, utilizando Alpine Linux como base.
 - `requirements.txt`: Lista as dependências Python (FastAPI, Uvicorn, etc.) necessárias para o backend.
 - `server.py`: Servidor Python que gerencia as conexões WebSocket e executa comandos shell recebidos.
 
@@ -45,5 +45,5 @@ Este projeto configura um ambiente com terminais interativos que se comunicam vi
 
 - **Docker** e **Docker Compose**
 - **FastAPI** e **Uvicorn** para o backend Python
-- **Node.js** e **xterm.js** para o frontend interativo
+- **xterm.js** para o frontend interativo
 - **Alpine Linux** como base dos containers para um ambiente otimizado
