@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terminais WebSocket</title>
+  
+  <!-- Incluir xterm.js e seu CSS via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+  
+  <style>
+    /* Estilo para exibir os terminais lado a lado e ocupar 100% da largura e 80% da altura */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .container {
+      display: flex;
+      gap: 20px;
+      flex: 1;
+      height: 80vh;
+    }
+
+    .terminal-wrapper {
+      flex: 1; /* Faz com que cada terminal ocupe 50% da largura da tela */
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .terminal {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Terminais WebSocket</h1>
+  
+  <div class="container">
+    <!-- Terminal 1 -->
+    <div class="terminal-wrapper">
+      <h2>Terminal - Porta 3001</h2>
+      <div id="terminal1" class="terminal"></div>
+    </div>
+    
+    <!-- Terminal 2 -->
+    <div class="terminal-wrapper">
+      <h2>Terminal - Porta 3002</h2>
+      <div id="terminal2" class="terminal"></div>
+    </div>
+  </div>
+
+  <script>
+    function createTerminal(elementId, websocketUrl) {
+      const ws = new WebSocket(websocketUrl);
+      const terminal = new Terminal();
+      let commandBuffer = "";  // Buffer para armazenar o comando completo
+      const commandHistory = [];  // Array para armazenar o histórico de comandos
+      let historyIndex = -1;  // Índice para navegar pelo histórico
+
+      terminal.open(document.getElementById(elementId));
+
+      // Ao abrir a conexão WebSocket
+      ws.onopen = () => {
+        console.log(`Conexão WebSocket aberta em ${websocketUrl}`);
+        terminal.writeln(`Conexão WebSocket aberta em ${websocketUrl}. Digite um comando:`);
+        terminal.write("> ");  // Prompt inicial
+      };
+
+      // Função para processar a entrada do usuário e enviar comando com "Enter"
+      terminal.onData(data => {
+        if (data === "\r") {  // "\r" representa "Enter" no xterm.js
+          // Salva o comando no histórico e reseta o índice
+          commandHistory.push(commandBuffer);
+          historyIndex = -1;  // Reseta o índice do histórico
+          
+          // Envia o comando completo para o servidor, mesmo que seja vazio
+          ws.send(JSON.stringify({ type: "command", data: commandBuffer }));
+          terminal.write("\r\n");  // Move para a próxima linha
+          commandBuffer = "";  // Limpa o buffer após o envio
+          terminal.write("> ");  // Adiciona o prompt para o próximo comando
+        } else if (data === "\u007F") {  // "\u007F" representa "Backspace" no xterm.js
+          // Remover o último caractere do buffer e do terminal
+          if (commandBuffer.length > 0) {
+            commandBuffer = commandBuffer.slice(0, -1);
+            terminal.write("\b \b");  // Apaga o último caractere no terminal
+          }
+        } else if (data === "\x1b[A") {  // "\x1b[A" representa a seta para cima
+          // Navega para cima no histórico
+          if (commandHistory.length > 0 && historyIndex < commandHistory.length - 1) {
+            historyIndex++;
+            commandBuffer = commandHistory[commandHistory.length - 1 - historyIndex];
+            terminal.write(`\r> ${commandBuffer}`);  // Exibe o comando do histórico
+          }
+        } else if (data === "\x1b[B") {  // "\x1b[B" representa a seta para baixo
+          // Navega para baixo no histórico
+          if (historyIndex > 0) {
+            historyIndex--;
+            commandBuffer = commandHistory[commandHistory.length - 1 - historyIndex];
+            terminal.write(`\r> ${commandBuffer}`);  // Exibe o comando do histórico
+          } else {
+            historyIndex = -1;
+            commandBuffer = "";
+            terminal.write("\r> ");  // Limpa a linha de entrada
+          }
+        } else {
+          // Adiciona a tecla pressionada ao buffer
+          commandBuffer += data;
+          terminal.write(data);  // Exibe o caractere no terminal
+        }
+      });
+
+      // Receber a resposta do servidor e exibir no terminal
+      ws.onmessage = (event) => {
+        console.log(`Mensagem bruta recebida do servidor (${websocketUrl}):`, event.data);  // Log inicial para verificar a recepção bruta
+
+        try {
+          const message = JSON.parse(event.data);
+          if (message.type === "data") {
+            // Exibe a resposta do servidor no terminal sem o ">"
+            terminal.writeln(message.data);
+            terminal.write("> ");  // Prompt para o próximo comando
+          } else if (message.type === "error") {
+            terminal.writeln(`Erro: ${message.data}`);
+            terminal.write("> ");  // Prompt para o próximo comando
+          }
+        } catch (error) {
+          console.error("Erro ao processar a mensagem recebida:", error);
+        }
+      };
+
+      // Quando a conexão for fechada
+      ws.onclose = () => {
+        terminal.writeln("Conexão WebSocket fechada.");
+      };
+    }
+
+    // Inicializar os dois terminais com WebSocket em portas diferentes
+    createTerminal("terminal1", "ws://localhost:3001/ws");
+    createTerminal("terminal2", "ws://localhost:3002/ws");
+  </script>
+</body>
+</html>

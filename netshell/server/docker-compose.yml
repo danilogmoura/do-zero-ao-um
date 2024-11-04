@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  pc-one:
+    build:
+      context: .
+    container_name: pc-one
+    environment:
+      - WS_PORT=3001
+    ports:
+      - "3001:3001"
+
+  pc-two:
+    build:
+      context: .
+    container_name: pc-two
+    environment:
+      - WS_PORT=3002
+    ports:
+      - "3002:3002"
