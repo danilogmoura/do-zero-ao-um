@@ -14,7 +14,7 @@
 - **Hexadecimal > Binário**
 
 ```
-F = 15			        0 = 0   C = 12                  A = 10
+F = 15			        0 = 0   	C = 12                  	A = 10
 15 / 2 = 7  Resto 1		0		12 / 2 = 6	Resto 0		10 / 2 = 5	Resto 0
 7  / 2 = 3  Resto 1		0		6  / 2 = 3	Resto 0		5  / 2 = 2	Resto 1
 3  / 2 = 1  Resto 1		0		3  / 2 = 1	Resto 1		2  / 2 = 1  Resto 0
@@ -56,7 +56,7 @@ F = 15			        0 = 0   C = 12                  A = 10
 - **Hexadecimal > Binário**
 
 ```
-1 = 1				    A = 10
+1 = 1				A = 10
 ---------	-------		10 / 2 = 5	Resto 0
 ---------	-------		5  / 2 = 2	Resto 1
 ---------	-------		2  / 2 = 1	Resto 0
